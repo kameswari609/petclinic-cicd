@@ -6,7 +6,7 @@ COPY target/*.jar /home/petclinic/
 
 WORKDIR /home/petclinic/
 
-EXPOSE 8282
+EXPOSE 8080
 
 ENV MYSQL_URL=jdbc:mysql://petclinic-mysql:3306/petclinic
 

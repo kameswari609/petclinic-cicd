@@ -15,12 +15,13 @@ services:
       - "./conf.d:/etc/mysql/conf.d:ro"
     profiles:
       - mysql
-
-  petclinic:
-    image: anirudhbadoni/petclinic
+  postgres:
+    image: postgres:16.1
     ports:
-      - "8080:8080"
+      - "5432:5432"
     environment:
-      - MYSQL_URL=jdbc:mysql://mysql:3306/petclinic
-    depends_on:
-      - mysql
+      - POSTGRES_PASSWORD=petclinic
+      - POSTGRES_USER=petclinic
+      - POSTGRES_DB=petclinic
+    profiles:
+      - postgres

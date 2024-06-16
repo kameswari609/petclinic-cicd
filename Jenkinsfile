@@ -22,9 +22,10 @@ pipeline {
                     userRemoteConfigs: [[url: 'https://github.com/AnirudhBadoni/Petclinic.git']]]) 
 
                     // Get the latest commit hash
-                    def commitHash = sh(script: 'git rev-parse --short=4 HEAD', returnStdout: true).trim()
-                    env.IMAGE_TAG = "${branchName}-${commitHash}"
-                    echo "image tag ig ${branchName}"
+                    def commitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    def shortCommitMessage = commitMessage.take(7)
+                    env.IMAGE_TAG = "${branchName}-${shortCommitMessage}"
+                    echo "Docker image tag: ${env.IMAGE_TAG}"
                 }
             }
         }

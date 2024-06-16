@@ -1,7 +1,7 @@
 pipeline {
     agent any
     triggers {
-        pollSCM('')
+        githpush()
     }
     tools {
         maven 'maven_3_6_3'

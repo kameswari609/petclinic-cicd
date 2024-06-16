@@ -1,105 +1,66 @@
 pipeline {
     agent any
-
+    
     tools {
-        maven 'Maven 3.x'  // Assuming Maven is configured in Jenkins
-        jdk 'JDK 11'       // Assuming JDK is configured in Jenkins
+        maven 'maven_3_6_3'
     }
-
-    environment {
-        SONAR_TOKEN = credentials('sonar-token') // Assuming a SonarCloud token is stored in Jenkins credentials
-        ARTIFACTORY_USER = credentials('artifactory-username')
-        ARTIFACTORY_PASSWORD = credentials('artifactory-password')
-        ARTIFACTORY_URL = 'https://your-artifactory-instance/artifactory'
-    }
-
+    
     stages {
+        stage('Prepration'){
+            steps {
+                cleanWs()
+            }
+        }
         stage('Checkout') {
             steps {
-                checkout scm
-            }
-        }
-
-        stage('SonarCloud Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    script {
-                        if (fileExists('pom.xml')) {
-                            sh 'mvn sonar:sonar -Dsonar.projectKey=your_project_key -Dsonar.organization=your_org -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN'
-                        } else {
-                            echo "No pom.xml found, skipping SonarCloud analysis."
-                        }
-                    }
+                script{
+                     // Checkout code from GitHub
+                    def branchName = env.BRANCH_NAME
+                    echo "Checking out code from branch: ${branchName}"
+                    checkout([$class: 'GitSCM', 
+                    branches: [[name: "${branchName}"]],  // Fetch code from all branches
+                    userRemoteConfigs: [[url: 'https://github.com/AnirudhBadoni/Petclinic.git']]])  
                 }
             }
         }
-
+        
         stage('Build') {
             steps {
+                // Your build steps here
+                sh './mvnw package'
+               
+            }
+        }
+        
+        stage('Sonar Scan') {
+            steps {
+                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=Petclinic -Dsonar.organization=anirudhbadoni -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=b63dd391f27bf876bed3136541a749490a938243'
+                
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
                 script {
-                    if (fileExists('pom.xml')) {
-                        sh 'mvn clean package'
-                    } else {
-                        echo "No pom.xml found, skipping Maven build."
+                    dockerImage = docker.build("anirudhbadoni/petclinic:latest")
+                }
+            }
+        }
+        stage('Push Docker Image to Docker Hub') {
+            environment {
+                DOCKER_REGISTRY = 'https://index.docker.io/v1/'
+                DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
+            }
+            steps {
+                script {
+                    docker.withRegistry(DOCKER_REGISTRY, DOCKER_CREDENTIALS_ID) {
+                        dockerImage.push("latest")
                     }
                 }
             }
         }
-
-        stage('Docker Build and Push') {
-            when {
-                expression {
-                    return fileExists('Dockerfile') && env.BRANCH_NAME ==~ /(main|master)/
-                }
-            }
-            steps {
-                script {
-                    def dockerImage = docker.build("your-image-name:${env.BRANCH_NAME}-${env.BUILD_ID}")
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
-
-        stage('Upload to Artifactory') {
-            steps {
-                script {
-                    def server = Artifactory.newServer url: ARTIFACTORY_URL, username: ARTIFACTORY_USER, password: ARTIFACTORY_PASSWORD
-                    def uploadSpec = """{
-                        "files": [
-                            {
-                                "pattern": "target/*.jar",
-                                "target": "your-repo-path/${env.BRANCH_NAME}/"
-                            },
-                            {
-                                "pattern": "target/*.war",
-                                "target": "your-repo-path/${env.BRANCH_NAME}/"
-                            }
-                        ]
-                    }"""
-                    server.upload spec: uploadSpec
-                }
-            }
-        }
-
-        stage('Tagging') {
-            steps {
-                script {
-                    def tagName = env.BRANCH_NAME == 'main' ? 'stable' : env.BRANCH_NAME
-                    sh "git tag -a ${tagName}-${env.BUILD_ID} -m 'Build ${env.BUILD_ID}'"
-                    sh "git push origin ${tagName}-${env.BUILD_ID}"
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build succeeded!'
-        }
-        failure {
-            echo 'Build failed!'
-        }
+        
     }
 }
+    
+

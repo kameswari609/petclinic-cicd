@@ -24,6 +24,7 @@ pipeline {
                     // Get the latest commit hash
                     def commitHash = sh(script: 'git rev-parse --short=4 HEAD', returnStdout: true).trim()
                     env.IMAGE_TAG = "${branchName}-${commitHash}"
+                    echo "image tag ig ${branchName}"
                 }
             }
         }
@@ -46,7 +47,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("anirudhbadoni/petclinic::${env.IMAGE_TAG}")
+                    dockerImage = docker.build("anirudhbadoni/petclinic:${env.IMAGE_TAG}")
                 }
             }
         }
@@ -58,7 +59,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry(DOCKER_REGISTRY, DOCKER_CREDENTIALS_ID) {
-                        dockerImage.push(":${env.IMAGE_TAG}")
+                        dockerImage.push("${env.IMAGE_TAG}")
                     }
                 }
             }

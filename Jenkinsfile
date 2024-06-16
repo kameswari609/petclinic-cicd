@@ -19,7 +19,11 @@ pipeline {
                     echo "Checking out code from branch: ${branchName}"
                     checkout([$class: 'GitSCM', 
                     branches: [[name: "${branchName}"]],  // Fetch code from all branches
-                    userRemoteConfigs: [[url: 'https://github.com/AnirudhBadoni/Petclinic.git']]])  
+                    userRemoteConfigs: [[url: 'https://github.com/AnirudhBadoni/Petclinic.git']]]) 
+
+                    // Get the latest commit hash
+                    def commitHash = sh(script: 'git rev-parse --short=4 HEAD', returnStdout: true).trim()
+                    env.IMAGE_TAG = "${branchName}-${commitHash}"
                 }
             }
         }
@@ -42,7 +46,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("anirudhbadoni/petclinic:latest")
+                    dockerImage = docker.build("anirudhbadoni/petclinic::${env.IMAGE_TAG}")
                 }
             }
         }
@@ -54,7 +58,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry(DOCKER_REGISTRY, DOCKER_CREDENTIALS_ID) {
-                        dockerImage.push("latest")
+                        dockerImage.push(":${env.IMAGE_TAG}")
                     }
                 }
             }

@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         ARTIFACTORY_CREDENTIALS = credentials('jfrog-credentials')  // Use credentials plugin to handle Artifactory credentials
-        ARTIFACTORY_URL = 'anirudhbadoni.jfrog.io/artifactory/api/docker'
+        ARTIFACTORY_URL = 'anirudhbadoni.jfrog.io'
         ARTIFACTORY_DOCKER_REPO = 'docker-local'
     }
     

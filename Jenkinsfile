@@ -65,7 +65,7 @@ pipeline {
         }
 
         stage('Push Docker image to Jfrog'){
-            step {
+            steps {
                 script {
                     echo 'Pushing to Jfrog'
                     withCredentials([UsernamePassword](credentialsId: jfrog-credentials, passwordVariable: 'PASS', usernameVariable: 'USER')){

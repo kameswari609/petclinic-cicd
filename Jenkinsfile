@@ -63,7 +63,21 @@ pipeline {
                 }
             }
         }
-        
+
+        stage('Push Docker image to Jfrog'){
+            step {
+                script {
+                    echo 'Pushing to Jfrog'
+                    withCredentials([UsernamePassword](credentialsId: jfrog-credentials, passwordVariable: 'PASS', usernameVariable: 'USER')){
+                        sh "anirudhbadoni/petclinic:${env.IMAGE_TAG} anirudhbadoni.jfrog.io/artifactory/api/docker/anirudh-local/anirudhbadoni/
+                        petclinic:${env.IMAGE_TAG}"
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh "docker push anirudhbadoni.jfrog.io/artifactory/api/docker/anirudh-local/anirudhbadoni/
+                        petclinic:${env.IMAGE_TAG}"
+                    }
+                }
+            }
+        }
     }
 }
     

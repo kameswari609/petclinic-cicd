@@ -3,6 +3,11 @@ pipeline {
     tools {
         maven 'maven_3_6_3'
     }
+    environment {
+        ARTIFACTORY_CREDENTIALS = credentials('jfrog-credentials')  // Use credentials plugin to handle Artifactory credentials
+        ARTIFACTORY_URL = 'https://anirudhbadoni.jfrog.io/artifactory/api/docker/docker-local'
+        ARTIFACTORY_DOCKER_REPO = 'docker-local'
+    }
     
     stages {
         stage('Prepration'){
@@ -64,15 +69,17 @@ pipeline {
             }
         }
 
-        stage('Push Docker image to Jfrog'){
+        stage('Push Docker Image to JFrog Artifactory') {
             steps {
                 script {
-                    echo 'Pushing to Jfrog'
-                    withCredentials([UsernamePassword](credentialsId: jfrog-credentials, passwordVariable: 'PASS', usernameVariable: 'USER')){
-                        sh "anirudhbadoni/petclinic:${env.IMAGE_TAG} anirudhbadoni.jfrog.io/artifactory/api/docker/anirudh-local/anirudhbadoni/petclinic:${env.IMAGE_TAG}"
-                        sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh "docker push anirudhbadoni.jfrog.io/artifactory/api/docker/anirudh-local/anirudhbadoni/petclinic:${env.IMAGE_TAG}"
-                    }
+                    // Login to JFrog Artifactory Docker registry
+                    sh "docker login -u ${ARTIFACTORY_CREDENTIALS_USR} -p ${ARTIFACTORY_CREDENTIALS_PSW} ${ARTIFACTORY_URL}"
+
+                    // Tag the Docker image
+                    sh "docker tag anirudhbadoni/petclinic:${env.IMAGE_TAG} ${ARTIFACTORY_URL}/${ARTIFACTORY_DOCKER_REPO}/anirudhbadoni/petclinic:${env.IMAGE_TAG}"
+
+                    // Push the Docker image to JFrog Artifactory
+                    sh "docker push ${ARTIFACTORY_URL}/${ARTIFACTORY_DOCKER_REPO}/anirudhbadoni/petclinic:${env.IMAGE_TAG}"
                 }
             }
         }

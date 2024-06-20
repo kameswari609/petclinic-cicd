@@ -2,7 +2,7 @@
 
 <details>
   <summary>Architecture</summary>
-  <img src="./Images/one.png">
+  <img src="./Images/two.png">
 </details>
 
 <details>

@@ -17,10 +17,18 @@ clone this repo: https://github.com/spring-projects/spring-petclinic
    
 
 <details class="nested">
-<summary> Scan code with Sonarcloud</summary><br>
+<summary>Setup the Sonarcloud</summary><br>
 1. Go to sonarcloud.io<br><br>  
 2. Login with GitHub<br><br>  
 3. Create an Organisation<br><br>
+4. Create a Project.
+</details>
+
+<details class="nested">
+<summary>Setup the Jfrog</summary><br>
+1. Go to sonarcloud.io<br><br>  
+2. Login with GitHub<br><br>  
+3. Create an Repository>>local>>docker>>fill the docker<br><br>
 4. Create a Project.
 </details>
 
@@ -59,14 +67,32 @@ OS name: "linux", version: "4.15.0-47-generic", arch: "amd64", family: "unix"
 </details>
 
 <details class="nested">
-<summary></summary><br>
- <p>Path to the Provisioner file: <a href = "./aws-ami-v1.pkr.hcl"> aws-ami-v1.pkr.hcl</a></p>
+<summary>Integrating maven with Jenkins</summary><br>
+1. Go to Jenkins Dashboard >> Manage Jenkins >> tools >> Maven Installation >> Add Maven<br>
+2. either opt for install automatically or give the name and path of the maven in your ec2 for reference which could later be called in the Jenkins pipeline.
 </details>
 
-  <details class="nested">
-  <summary>Provisioner</summary><br>
-  <p>Path to the Provisioner file: <a href = "./provisioner.sh"> Provisioner.sh</a></p>
-  </details>
+<details class="nested">
+<summary>Integrating SonarCloud with Jenkins</summary><br>
+1. Go to SonarCloud Dashboard >> Account ID >> My Account >> Security >> Generatetoken<br>
+2. Copy the code and paste it into the pipeline.
+</details>
+
+<details class="nested">
+<summary>Integrating Github with Jenkins with the help of webhooks</summary><br>
+1. Go to GitHub Dashboard >> Repository >> Settings >> webhook<br>
+2. fill the payload URL as https://localhost:portnumber/jenkins-webhook/ , content type
+3. Click on Update webhook<br>
+
+**Note:** We have used Ngrok to serve as a server proxy as my instance is running in localhost and is not accessible by the internet.
+  
+</details>
+
+
+<details class="nested">
+<summary>Jenkins File</summary><br>
+<p>Path to the Jenkinsfile file: <a href = "./Jenkinsfile"> Jenkinsfile</a></p>
+</details>
 
   <details class="nested">
   <summary>Launch Jenkins and Create a Pipeline with the following stages</summary><br>

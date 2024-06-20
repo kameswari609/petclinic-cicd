@@ -11,7 +11,7 @@
 
 <details class="nested">
 <summary>Create GitHub repository</summary><br>
-We will create a GitHub repository for Part One. This repository will serve as a central hub for developers to easily interact with the               project and manage their contributions. It will also provide a solid anchor for our Jenkins pipeline, ensuring smooth integration and                 continuous deployment processes. By utilizing GitHub, we promote collaboration, version control, and transparency within the team,                    enhancing overall productivity and project management.<br> 
+We will create a GitHub repository for Part One. This repository will serve as a central hub for developers to easily interact with the               project and manage their contributions. It will also provide a solid anchor for our Jenkins pipeline, ensuring smooth integration and                 continuous deployment processes. By utilizing GitHub, we promote collaboration, version control, and transparency within the team,                    enhancing overall productivity and project management.<br><br> 
 clone this repo: https://github.com/spring-projects/spring-petclinic
 </details>
    
@@ -30,12 +30,36 @@ clone this repo: https://github.com/spring-projects/spring-petclinic
 We will create an EC2 instance on AWS and set up the project there. This way, the project setup won’t interfere with our local machines, and our      local setups won’t affect the project. By isolating the environment, we ensure a clean and consistent setup for everyone involved, making it easier to manage dependencies and configurations. Additionally, this approach allows for better scalability and flexibility as we can easily         replicate the environment or scale resources as needed.<br><br>
 
 1. Install Jenkins on the Instance.<br><br>
+<pre><code>  
+sudo apt update
+sudo apt install openjdk-11-jdk
+java --version
+wget -p -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt update
+sudo apt install jenkins
+sudo systemctl status jenkins
+sudo systemctl start jenkins
+</code> </pre><br>
 2. Install Maven on the Instance.<br><br>
+<pre><code> 
+$ wget https://mirrors.estointernet.in/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+$ tar -xvf apache-maven-3.6.3-bin.tar.gz
+$ mv apache-maven-3.6.3 /opt/
+M2_HOME='/opt/apache-maven-3.6.3'
+PATH="$M2_HOME/bin:$PATH"
+export PATH
+$ mvn -version
+Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
+Maven home: /opt/apache-maven-3.6.3
+Java version: 13.0.1, vendor: Oracle Corporation, runtime: /opt/jdk-13.0.1
+Default locale: en, platform encoding: UTF-8
+OS name: "linux", version: "4.15.0-47-generic", arch: "amd64", family: "unix"
+</code> </pre><br>
 </details>
 
-
 <details class="nested">
-<summary>Packer configuration</summary><br>
+<summary></summary><br>
  <p>Path to the Provisioner file: <a href = "./aws-ami-v1.pkr.hcl"> aws-ami-v1.pkr.hcl</a></p>
 </details>
 

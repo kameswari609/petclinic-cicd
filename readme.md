@@ -20,8 +20,13 @@ clone this repo: https://github.com/spring-projects/spring-petclinic
 <summary>Setup the Sonarcloud</summary><br>
 1. Go to sonarcloud.io<br><br>  
 2. Login with GitHub<br><br>  
-3. Create an Organisation<br><br>
-4. Create a Project.
+3. Create a new Organisation<br><br>
+  <img src="./Images/sonarcloud1.png">
+  Then click on Create Organisation <br>
+4. Create a Project.<br>
+  <img src="./Images/sonarcloud2.png"><br>
+  Follow the setup and then click on Create Project.
+5.
 </details>
 
 <details class="nested">
@@ -81,7 +86,7 @@ OS name: "linux", version: "4.15.0-47-generic", arch: "amd64", family: "unix"
 <details class="nested">
 <summary>Integrating Github with Jenkins with the help of webhooks</summary><br>
 1. Go to GitHub Dashboard >> Repository >> Settings >> webhook<br>
-2. fill the payload URL as https://localhost:portnumber/jenkins-webhook/ , content type
+2. fill the payload URL as https://localhost:portnumber/jenkins-webhook/ , content type<br>
 3. Click on Update webhook<br>
 
 **Note:** We have used Ngrok to serve as a server proxy as my instance is running in localhost and is not accessible by the internet.
@@ -108,7 +113,7 @@ OS name: "linux", version: "4.15.0-47-generic", arch: "amd64", family: "unix"
   </details>
 
   <details class="nested">
-  <summary>Check for the ami on AWS Console</summary><br>
+  <summary>Check for the Docker image in Docker Hub as well as Jfrog Consoles</summary><br>
      We will be able to find the ami with the name and tags passed by us in the region specified by us in the AWS console.
     <img src="./Images/aws1.png">
     

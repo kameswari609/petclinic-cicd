@@ -31,10 +31,14 @@ clone this repo: https://github.com/spring-projects/spring-petclinic
 
 <details class="nested">
 <summary>Setup the Jfrog</summary><br>
-1. Go to sonarcloud.io<br><br>  
-2. Login with GitHub<br><br>  
-3. Create an Repository>>local>>docker>>fill the docker<br><br>
-4. Create a Project.
+1. Go to Jfrog.io<br><br>  
+2. Login with Username and Password<br>
+   make sure to save the username and password as we will need them as credentials in future steps.<br>  
+3. Go to Administration on the main page>>Repositories>>create repository>>local>>docker>>repositoryname>>click on create repo<br>
+   <img src="./Images/jfrog1.png"><br>
+4. Copy the URL and click on set up docker client>> Give the token name and follow the steps in the ec2 created.<br>
+   <img src="./Images/jfrog2.png"><br>
+5. Create a Project.<br>
 </details>
 
 
@@ -75,12 +79,14 @@ OS name: "linux", version: "4.15.0-47-generic", arch: "amd64", family: "unix"
 <summary>Integrating maven with Jenkins</summary><br>
 1. Go to Jenkins Dashboard >> Manage Jenkins >> tools >> Maven Installation >> Add Maven<br>
 2. either opt for install automatically or give the name and path of the maven in your ec2 for reference which could later be called in the Jenkins pipeline.
+  <img src="./Images/maven1.png"><br>
 </details>
 
 <details class="nested">
 <summary>Integrating SonarCloud with Jenkins</summary><br>
 1. Go to SonarCloud Dashboard >> Account ID >> My Account >> Security >> Generatetoken<br>
 2. Copy the code and paste it into the pipeline.
+   <img src="./Images/sonarcloud3.png"><br>
 </details>
 
 <details class="nested">
@@ -88,6 +94,7 @@ OS name: "linux", version: "4.15.0-47-generic", arch: "amd64", family: "unix"
 1. Go to GitHub Dashboard >> Repository >> Settings >> webhook<br>
 2. fill the payload URL as https://localhost:portnumber/jenkins-webhook/ , content type<br>
 3. Click on Update webhook<br>
+ <img src="./Images/webhook1.png"><br>
 
 **Note:** We have used Ngrok to serve as a server proxy as my instance is running in localhost and is not accessible by the internet.
   
@@ -104,18 +111,23 @@ OS name: "linux", version: "4.15.0-47-generic", arch: "amd64", family: "unix"
   <p>Path to the Provisioner file: <a href = "./Jenkinsfile"> Jenkinsfile</a></p>
   Steps followed:<br>
     1. Create a Jenkins job with the following configurations:<br><br>
-      &nbsp;a. Item Type: pipeline<br>
-      &nbsp;b. Pipeline Definition(at the last of the configuration): Pipeline Script from SCM, SCM: Git, Repository URL: your repository URL,             Credentials: &nbsp; none, Branc Specifier(main/master whichever is yours), Script Path: Jenkinsfile.<br><br>
-    2. Install the following plugins: Git Plugin, GitHub Integration Plugin, Pipeline: GitHub Plugin, AWS Credentials Plugin, and AWS Steps Plugin.<br><br>
-    3. Creta a credential in Jenkins to store the  AWS access key and secret key as username and password also pass the ID.<br><br>
+      &nbsp;a. Item Type: Multibranchpipeline<br>
+      &nbsp;b. Branch Source: Git, give your git repo URL, Property strategy: all branches get the same properties, Build Configuration: 
+      Jenkinsfile, 
+      Scan Multibranch Pipeline Trigger: scan by webhook, give the trigger token and follow the steps in github<br><br>
+    2. Install the following plugins: GitHub Plugin, GitHub Branch Source Plugin,Pipeline Plugin, Multibranch Pipeline Plugin, SonarQube Scanner 
+    Plugin, JFrog Artifactory Plugin, Docker Plugin, Docker Pipeline Plugin:<br><br>
+    3. Creta a credential in Jenkins to store the  AWS access key and secret key as username and password also pass the ID, similarly for docker and 
+   jfrog <br><br>
     4. Build the pipeline if no errors occur we will be able to find an ami in the location specified.
     <img src="./Images/jenkins1.png">
   </details>
 
   <details class="nested">
   <summary>Check for the Docker image in Docker Hub as well as Jfrog Consoles</summary><br>
-     We will be able to find the ami with the name and tags passed by us in the region specified by us in the AWS console.
-    <img src="./Images/aws1.png">
+     we will be able to find the docker image with the branch and commit ID as a tag.
+    <img src="./Images/dockerhub1.png"><br>
+    <img src="./Images/jfrog3.png"><br>
     
   </details>
  

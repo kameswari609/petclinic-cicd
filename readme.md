@@ -96,8 +96,15 @@ OS name: "linux", version: "4.15.0-47-generic", arch: "amd64", family: "unix"
 3. Click on Update webhook<br>
  <img src="./Images/webhook1.png"><br>
 
-**Note:** We have used Ngrok to serve as a server proxy as my instance is running in localhost and is not accessible by the internet.
-  
+**Note:** We have used Ngrok as a server proxy as my instance is running on localhost and is inaccessible to the internet.
+
+Steps to run ngrok on your machine:
+
+1. Download the ngrok
+2. run the command: ngrok HTTP (port number)
+3. it will give you a URL which will be accessible from the internet.
+4. copy the URL and paste it into the webhook.
+5. https://1443-103-47-14-188.ngrok-free.app/multibranch-webhook-trigger/invoke?token=my-secret-token
 </details>
 
 
@@ -120,7 +127,7 @@ OS name: "linux", version: "4.15.0-47-generic", arch: "amd64", family: "unix"
     3. Creta a credential in Jenkins to store the  AWS access key and secret key as username and password also pass the ID, similarly for docker and 
    jfrog <br><br>
     4. Build the pipeline if no errors occur we will be able to find an ami in the location specified.
-    <img src="./Images/jenkins1.png">
+  
   </details>
 
   <details class="nested">

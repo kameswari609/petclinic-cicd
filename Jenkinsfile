@@ -16,30 +16,19 @@ pipeline {
             }
         }
         stage('Checkout') {
-            steps {
-                script{
-                     // Checkout code from GitHub
-                    def branchName = env.BRANCH_NAME
-                    echo "Checking out code from branch: ${branchName}"
-                    checkout([$class: 'GitSCM', 
-                    branches: [[name: "${branchName}"]],  // Fetch code from all branches
-                    userRemoteConfigs: [[url: 'https://github.com/kameswari609/petclinic-cicd.git']]]) 
-
-                    // Get the latest commit hash
-                    def commitId = sh(script: 'git rev-parse HEAD', returnStdout: true).trim().take(7)
-                    env.IMAGE_TAG = "${branchName}-${commitId}"
-                    echo "Docker image tag: ${env.IMAGE_TAG}"
-                }
-            }
-        }
-        
-        stage('Build') {
-            steps {
-                // Your build steps here
-                sh './mvnw package'
-               
-            }
-        }
+      steps {
+        sh 'echo passed'
+        //git branch: 'main', url: 'https://github.com/kameswari609/Jenkins-Zero-To-Hero.git'
+      }
+    }
+    stage('Build and Test') {
+      steps {
+        sh 'ls -ltr'
+        // build the project and create a JAR file
+           // sh './mvnw package'
+        sh 'cd petclinic-cicd && mvn clean package'
+      }
+    }
         
         stage('Sonar Scan') {
             steps {

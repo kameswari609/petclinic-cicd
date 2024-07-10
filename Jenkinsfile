@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    tools {
-        maven 'maven_3_8_7'
-    }
+   
     environment {
         ARTIFACTORY_CREDENTIALS = credentials('jfrog-credentials')  // Use credentials plugin to handle Artifactory credentials
         ARTIFACTORY_URL = 'aparnamk.jfrog.io'

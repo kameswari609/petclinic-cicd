@@ -1,12 +1,12 @@
 pipeline {
     agent any
     tools {
-        maven 'maven_3_6_3'
+        maven 'maven_3_8_7'
     }
     environment {
         ARTIFACTORY_CREDENTIALS = credentials('jfrog-credentials')  // Use credentials plugin to handle Artifactory credentials
-        ARTIFACTORY_URL = 'anirudhbadoni.jfrog.io'
-        ARTIFACTORY_DOCKER_REPO = 'docker-local'
+        ARTIFACTORY_URL = 'aparnamk.jfrog.io'
+        ARTIFACTORY_DOCKER_REPO = 'aparna'
     }
     
     stages {
@@ -23,7 +23,7 @@ pipeline {
                     echo "Checking out code from branch: ${branchName}"
                     checkout([$class: 'GitSCM', 
                     branches: [[name: "${branchName}"]],  // Fetch code from all branches
-                    userRemoteConfigs: [[url: 'https://github.com/AnirudhBadoni/Petclinic.git']]]) 
+                    userRemoteConfigs: [[url: 'https://github.com/kameswari609/petclinic-cicd.git']]]) 
 
                     // Get the latest commit hash
                     def commitId = sh(script: 'git rev-parse HEAD', returnStdout: true).trim().take(7)
@@ -43,31 +43,27 @@ pipeline {
         
         stage('Sonar Scan') {
             steps {
-                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=Petclinic -Dsonar.organization=anirudhbadoni -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=b63dd391f27bf876bed3136541a749490a938243'
+                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=packerkey -Dsonar.organization=packeraws -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=20157908dffc0c41730e79135cb0fd1aff632cc1'
                 
             }
         }
         
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    dockerImage = docker.build("anirudhbadoni/petclinic:${env.IMAGE_TAG}")
-                }
+       stage('Build and Push Docker Image') {
+      environment {
+        DOCKER_IMAGE = "aparnamantravadi/petclinicdeploy:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
+        REGISTRY_CREDENTIALS = credentials('docker-cred')
+      }
+      steps {
+        script {
+            sh 'cd petclinic-cicd && docker build -t ${DOCKER_IMAGE} .'
+            def dockerImage = docker.image("${DOCKER_IMAGE}")
+            docker.withRegistry('https://index.docker.io/v2/', "docker-cred") {
+                dockerImage.push()
             }
         }
-        stage('Push Docker Image to Docker Hub') {
-            environment {
-                DOCKER_REGISTRY = 'https://index.docker.io/v1/'
-                DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-            }
-            steps {
-                script {
-                    docker.withRegistry(DOCKER_REGISTRY, DOCKER_CREDENTIALS_ID) {
-                        dockerImage.push("${env.IMAGE_TAG}")
-                    }
-                }
-            }
-        }
+      }
+    }
 
         stage('Push Docker Image to JFrog Artifactory') {
             steps {

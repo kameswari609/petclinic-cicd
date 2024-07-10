@@ -72,10 +72,10 @@ pipeline {
                     sh "docker login -u ${ARTIFACTORY_CREDENTIALS_USR} -p ${ARTIFACTORY_CREDENTIALS_PSW} ${ARTIFACTORY_URL}"
 
                     // Tag the Docker image
-                    sh "docker tag anirudhbadoni/petclinic:${env.IMAGE_TAG} ${ARTIFACTORY_URL}/${ARTIFACTORY_DOCKER_REPO}/anirudhbadoni/petclinic:${env.IMAGE_TAG}"
+                    sh "docker tag aparnamantravadi/petclinicdeploy:${env.IMAGE_TAG} ${ARTIFACTORY_URL}/${ARTIFACTORY_DOCKER_REPO}/aparnamantravadi/petclinicdeploy:${env.IMAGE_TAG}"
 
                     // Push the Docker image to JFrog Artifactory
-                    sh "docker push ${ARTIFACTORY_URL}/${ARTIFACTORY_DOCKER_REPO}/anirudhbadoni/petclinic:${env.IMAGE_TAG}"
+                    sh "docker push ${ARTIFACTORY_URL}/${ARTIFACTORY_DOCKER_REPO}/aparnamantravadi/petclinicdeploy:${env.IMAGE_TAG}"
                 }
             }
         }

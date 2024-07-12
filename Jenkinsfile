@@ -22,9 +22,9 @@ pipeline {
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
-        // build the project and create a JAR file
-        //sh './mvnw package'
-        sh 'mvn package'
+          // build the project and create a JAR file
+        sh './mvnw package'
+        //sh 'mvn package'
       }
     }
         

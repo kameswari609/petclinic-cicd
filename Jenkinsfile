@@ -22,9 +22,12 @@ pipeline {
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
+         withMaven {
+          sh "mvn clean verify"
+        } 
           // build the project and create a JAR file
-        sh './mvnw package'
-        //sh 'mvn package'
+          // sh './mvnw package'
+          //sh 'mvn package'
       }
     }
         

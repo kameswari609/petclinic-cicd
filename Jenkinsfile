@@ -14,20 +14,32 @@ pipeline {
             }
         }
         stage('Checkout') {
-      steps {
-        sh 'echo passed'
+            steps {
+                script{
+                     // Checkout code from GitHub
+                    def branchName = env.BRANCH_NAME
+                    echo "Checking out code from branch: ${branchName}"
+                    checkout([$class: 'GitSCM', 
+                    branches: [[name: "${branchName}"]],  // Fetch code from all branches
+                    userRemoteConfigs: [[url: 'https://github.com/kameswari609/petclinic-cicd.git']]]) 
+
+                    // Get the latest commit hash
+                    def commitId = sh(script: 'git rev-parse HEAD', returnStdout: true).trim().take(7)
+                    env.IMAGE_TAG = "${branchName}-${commitId}"
+                    echo "Docker image tag: ${env.IMAGE_TAG}"
+                }
+            }
+        }
         
-      }
-    }
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
           
           // build the project and create a JAR file
-               sh'pwd'
-             sh 'mvn - f  /petclinic-cicd/blob/main/pom.xml clean test'
+              sh'pwd'
+            // sh 'mvn - f  /petclinic-cicd/blob/main/pom.xml clean test'
            //sh 'mvn -B -DskipTests clean package'
-              //sh './mvnw package'
+              sh './mvnw package'
           //sh 'mvn package'
       }
     }

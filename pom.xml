@@ -22,8 +22,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- Important for reproducible builds. Update using e.g. ./mvnw versions:set -DnewVersion=... -->
     <project.build.outputTimestamp>2023-05-10T07:42:50Z</project.build.outputTimestamp>
-    <sonar.organization>packerkey_petclinicdeployproject</sonar.organization>
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    
 
     <!-- Web dependencies -->
     <webjars-bootstrap.version>5.3.2</webjars-bootstrap.version>

@@ -23,8 +23,8 @@ pipeline {
       steps {
         sh 'ls -ltr'
         // build the project and create a JAR file
-        //sh './mvnw package'
-        sh 'mvn clean package'
+        sh './mvnw package'
+        //sh 'cd 'petclinic-cicd/blob/main/mvnw' && 'mvn clean package''
       }
     }
         

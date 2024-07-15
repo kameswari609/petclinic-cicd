@@ -1,12 +1,7 @@
 pipeline {
     agent any
    
-    environment {
-        ARTIFACTORY_CREDENTIALS = credentials('jfrog-credentials')  // Use credentials plugin to handle Artifactory credentials
-        ARTIFACTORY_URL = 'aparnamk.jfrog.io'
-        ARTIFACTORY_DOCKER_REPO = 'aparna'
-    }
-    
+   
     stages {
         stage('Prepration'){
             steps {
@@ -17,7 +12,7 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        sh 'echo passed'
+        sh 'echo passed the git checkout'
         git branch: 'main', url: 'https://github.com/kameswari609/petclinic-cicd.git'
       }
     }

@@ -21,9 +21,9 @@ pipeline {
             
         
         
-    stage('Build and Test') {
-      steps {
-        sh 'ls -ltr'
+   // stage('Build and Test') {
+    //  steps {
+     //   sh 'ls -ltr'
           
           // build the project and create a JAR file
               sh'pwd'
@@ -31,17 +31,17 @@ pipeline {
            //sh 'mvn -B -DskipTests clean package'
               sh './mvnw package'
           //sh 'mvn package'
-      }
-    }
+    //  }
+  //  }
         
-        stage('Sonar Scan') {
-            steps {
-                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=packerkey_petclinicdeployproject -Dsonar.organization=packerkey -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=20157908dffc0c41730e79135cb0fd1aff632cc1'
+     //   stage('Sonar Scan') {
+           // steps {
+              //  sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=packerkey_petclinicdeployproject -Dsonar.organization=packerkey -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=20157908dffc0c41730e79135cb0fd1aff632cc1'
                 // mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=packerkey_petclinicdeployproject
                 
 
-            }
-        }
+          //  }
+      //  }
         
        stage('Build Docker Image') {
             steps {

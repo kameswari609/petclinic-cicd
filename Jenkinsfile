@@ -43,22 +43,26 @@ pipeline {
             }
         }
         
-       stage('Build and Push Docker Image') {
-      environment {
-        DOCKER_IMAGE = "aparnamantravadi/petclinicdeploy:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
-        REGISTRY_CREDENTIALS = credentials('docker-cred')
-      }
-      steps {
-        script {
-            sh 'cd petclinic-cicd && docker build -t ${DOCKER_IMAGE} .'
-            def dockerImage = docker.image("${DOCKER_IMAGE}")
-            docker.withRegistry('https://index.docker.io/v2/', "docker-cred") {
-                dockerImage.push()
+       stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("kameswari609/petclinic-cicd:${env.IMAGE_TAG}")
+                }
             }
         }
-      }
-    }
+        stage('Push Docker Image to Docker Hub') {
+            environment {
+                DOCKER_REGISTRY = 'https://index.docker.io/v1/'
+                DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
+            }
+            steps {
+                script {
+                    docker.withRegistry(DOCKER_REGISTRY, DOCKER_CREDENTIALS_ID) {
+                        dockerImage.push("${env.IMAGE_TAG}")
+                    }
+                }
+            }
+        }
 
         stage('Push Docker Image to JFrog Artifactory') {
             steps {

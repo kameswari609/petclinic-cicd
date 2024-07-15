@@ -29,7 +29,7 @@ pipeline {
               sh'pwd'
             // sh 'mvn - f  /petclinic-cicd/blob/main/pom.xml clean test'
            //sh 'mvn -B -DskipTests clean package'
-              sh './mvnw package'
+           //   sh './mvnw package'
           //sh 'mvn package'
     //  }
   //  }

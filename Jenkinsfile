@@ -21,18 +21,18 @@ pipeline {
             
         
         
-   // stage('Build and Test') {
-    //  steps {
-     //   sh 'ls -ltr'
+    stage('Build and Test') {
+      steps {
+         sh 'ls -ltr'
           
-          // build the project and create a JAR file
-           //   sh'pwd'
-            // sh 'mvn - f  /petclinic-cicd/blob/main/pom.xml clean test'
+           // build the project and create a JAR file
+              sh'pwd'
+             // sh 'mvn - f  /petclinic-cicd/blob/main/pom.xml clean test'
            //sh 'mvn -B -DskipTests clean package'
-           //   sh './mvnw package'
-          //sh 'mvn package'
-    //  }
-  //  }
+              sh './mvnw package'
+        
+       }
+     }
         
      //   stage('Sonar Scan') {
            // steps {

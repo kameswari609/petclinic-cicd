@@ -46,7 +46,7 @@ pipeline {
        stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("kameswari609/petclinic-cicd:${env.IMAGE_TAG}")
+                    dockerImage = docker.build("aparnamantravadi/petclinicdeploy:${env.IMAGE_TAG}")
                 }
             }
         }

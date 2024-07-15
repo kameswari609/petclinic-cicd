@@ -26,7 +26,7 @@ pipeline {
      //   sh 'ls -ltr'
           
           // build the project and create a JAR file
-              sh'pwd'
+           //   sh'pwd'
             // sh 'mvn - f  /petclinic-cicd/blob/main/pom.xml clean test'
            //sh 'mvn -B -DskipTests clean package'
            //   sh './mvnw package'

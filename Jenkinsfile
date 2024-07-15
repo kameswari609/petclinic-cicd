@@ -36,9 +36,10 @@ pipeline {
         
         stage('Sonar Scan') {
             steps {
-                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=packerkey_petclinicdeployproject -Dsonar.organization= "packeraws" -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=20157908dffc0c41730e79135cb0fd1aff632cc1'
+                sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=packerkey_petclinicdeployproject -Dsonar.organization=packerkey -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=20157908dffc0c41730e79135cb0fd1aff632cc1'
                 // mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=packerkey_petclinicdeployproject
                 
+
             }
         }
         

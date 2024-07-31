@@ -32,5 +32,5 @@ jobs:
           DOCKER_PASSWORD: Sreedevi1990!
         run: |
           docker build -t aparnamantravadi/petclinicdeploy:${{github.run_id}} .
-          docker login -u aparnamantravadi -p Sreedevi1990!
+          docker login -u aparnamantravadi --password-stdin	Sreedevi1990!
           docker push aparnamantravadi/petclinicdeploy:${{github.run_id}}

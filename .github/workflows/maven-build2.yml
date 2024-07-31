@@ -1,0 +1,32 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Build with Maven
+        run: mvn clean install
+
+     
+      - name: Build and Push Docker Image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker build -t <DOCKERHUB_USERNAME>/peetclinicdeploy:<TAG> .
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker push <DOCKERHUB_USERNAME>/petclinicdeploy:<TAG>

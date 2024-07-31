@@ -25,12 +25,20 @@ jobs:
           
       - name: Build with Maven Wrapper
         run: ./mvnw -B package
-     
-      - name: Build and Push Docker Image
-        env:
-          DOCKER_USERNAME: aparnamantravadi
-          DOCKER_PASSWORD: Sreedevi1990!
-        run: |
-          docker build -t aparnamantravadi/petclinicdeploy:${{github.run_id}} .
-          docker login -u aparnamantravadi --password-stdin	Sreedevi1990!
-          docker push aparnamantravadi/petclinicdeploy:${{github.run_id}}
+
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Generate timestamp
+        run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag aparnamantravadi/petclinicdeploy:${TIMESTAMP}
+
+      - name: Push the Docker image
+        run: docker push  aparnamantravadi/petclinicdeploy:${TIMESTAMP}

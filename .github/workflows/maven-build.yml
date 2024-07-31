@@ -29,8 +29,8 @@ jobs:
       - name: Build and Push Docker Image
         env:
           DOCKER_USERNAME: aparnamantravadi
-          DOCKER_PASSWORD: dckr_pat_GUJucd3bpKy51CEj1cVbYVEZlG4
+          DOCKER_PASSWORD: Sreedevi1990!
         run: |
-          docker build -t <DOCKERHUB_USERNAME>/peetclinicdeploy:<TAG> .
+          docker build -t <DOCKERHUB_USERNAME>/petclinicdeploy:<TAG> .
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker push <DOCKERHUB_USERNAME>/petclinicdeploy:<TAG>

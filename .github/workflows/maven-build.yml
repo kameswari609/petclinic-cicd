@@ -31,6 +31,6 @@ jobs:
           DOCKER_USERNAME: aparnamantravadi
           DOCKER_PASSWORD: Sreedevi1990!
         run: |
-          docker build -t aparnamantravadi/petclinicdeploy:<TAG> .
+          docker build -t aparnamantravadi/petclinicdeploy:${{github.run_id}} .
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker push aparnamantravadi/petclinicdeploy:<TAG>
+          docker push aparnamantravadi/petclinicdeploy:${{github.run_id}}
